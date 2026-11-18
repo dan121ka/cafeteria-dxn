@@ -1,0 +1,600 @@
+<!-- BARRA DE NAVEGACIÓN -->
+<header class="navbar">
+  <div class="container nav-content">
+    <a href="#" class="nav-logo" (click)="scrollTo('inicio'); $event.preventDefault()">
+      <div class="logo-icon-wrap">
+        <i class="bi bi-cup-hot-fill"></i>
+      </div>
+      <div class="logo-text">
+        <span class="logo-title">DXN <span class="text-gold">CoffeeHouse</span></span>
+        <span class="logo-tag">Cafetería & Bienestar</span>
+      </div>
+    </a>
+
+    <nav class="nav-links" [class.open]="menuMovilAbierto()">
+      <a (click)="scrollTo('inicio')" class="nav-link">Inicio</a>
+      <a (click)="scrollTo('servicios')" class="nav-link">Servicios</a>
+      <a (click)="scrollTo('especialidades')" class="nav-link">Especialidades</a>
+      <a (click)="scrollTo('nosotros')" class="nav-link">Nosotros</a>
+      <a (click)="scrollTo('precios')" class="nav-link">Precios</a>
+      <a (click)="scrollTo('contacto')" class="nav-link">Contactos</a>
+      <a [href]="'https://wa.me/59171234567?text=' + encodeUri('¡Hola DXN CoffeeHouse! Deseo hacer un pedido o consulta.')" 
+         target="_blank" class="btn btn-whatsapp-nav">
+        <i class="bi bi-whatsapp"></i> Soporte
+      </a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="btn btn-sm btn-outline chat-trigger-btn" (click)="toggleChat()">
+        <i class="bi bi-robot"></i> Barista IA
+      </button>
+      <button class="nav-toggle" (click)="toggleMenuMovil()" aria-label="Abrir menú">
+        <i class="bi" [class.bi-list]="!menuMovilAbierto()" [class.bi-x-lg]="menuMovilAbierto()"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- SECCIÓN INICIO / HERO CON VIDEO EN BUCLE DE PEXELS -->
+<section id="inicio" class="hero-section">
+  <div class="hero-video-wrap">
+    <video
+      class="hero-video"
+      autoplay
+      loop
+      muted
+      playsinline
+      [poster]="config()['hero_poster'] || 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1920'">
+      <source [src]="config()['hero_video_url'] || 'https://videos.pexels.com/video-files/2909914/2909914-hd_1920_1080_24fps.mp4'" type="video/mp4">
+      <source [src]="config()['hero_video_backup_url'] || 'https://videos.pexels.com/video-files/855564/855564-hd_1920_1080_25fps.mp4'" type="video/mp4">
+      Tu navegador no soporta videos HTML5.
+    </video>
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="container hero-content">
+    <div class="hero-badge">
+      <i class="bi bi-geo-alt-fill text-gold"></i>
+      <span>{{ config()['hero_subtitulo'] || 'COCHABAMBA · BOLIVIA' }}</span>
+    </div>
+
+    <h1 class="hero-title">
+      {{ config()['hero_titulo'] || 'El Mejor Café de la Ciudad' }}
+    </h1>
+
+    <p class="hero-description">
+      {{ config()['hero_descripcion'] || 'Calidad, sabor y bienestar natural en cada taza. Disfruta de la fusión perfecta entre café gourmet y el poder del hongo Ganoderma Lucidum.' }}
+    </p>
+
+    <div class="hero-buttons">
+      <button class="btn btn-primary btn-lg" (click)="scrollTo('especialidades')">
+        <i class="bi bi-cup-hot"></i> EXPLORAR MENÚ
+      </button>
+      <button class="btn btn-outline btn-lg" (click)="toggleChat()">
+        <i class="bi bi-chat-quote-fill"></i> Hablar con Barista Virtual
+      </button>
+      <a [href]="'https://wa.me/' + (config()['whatsapp'] || '59171234567')" target="_blank" class="btn btn-whatsapp-hero">
+        <i class="bi bi-whatsapp"></i> Pedir por WhatsApp
+      </a>
+    </div>
+
+    <!-- Barra de puntos destacados -->
+    <div class="hero-features-bar">
+      <div class="feature-item">
+        <i class="bi bi-shield-check text-gold"></i>
+        <span>100% Ganoderma Orgánico</span>
+      </div>
+      <div class="feature-item">
+        <i class="bi bi-heart-pulse text-gold"></i>
+        <span>Café Alcalino Sin Gastritis</span>
+      </div>
+      <div class="feature-item">
+        <i class="bi bi-award text-gold"></i>
+        <span>Calidad Internacional DXN</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN SERVICIOS -->
+<section id="servicios" class="section-padding services-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Lo Que Ofrecemos</span>
+      <h2 class="section-title">Servicios de Cafetería & Bienestar</h2>
+      <p class="section-subtitle">
+        Diseñamos cada servicio para que tu visita sea reconfortante, nutritiva e inspiradora.
+      </p>
+    </div>
+
+    <div class="services-grid">
+      @for (serv of servicios(); track serv.id) {
+        <div class="service-card">
+          <div class="service-img-wrap">
+            <img [src]="serv.imagen" [alt]="serv.titulo" loading="lazy">
+            <div class="service-icon-badge">
+              <i class="bi" [class]="serv.icono || 'bi-cup-hot'"></i>
+            </div>
+          </div>
+          <div class="service-body">
+            @if (serv.subtitulo) {
+              <span class="service-subtitle">{{ serv.subtitulo }}</span>
+            }
+            <h3 class="service-title">{{ serv.titulo }}</h3>
+            <p class="service-desc">{{ serv.descripcion }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN ESPECIALIDADES -->
+<section id="especialidades" class="section-padding specialties-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Menú Saludable DXN</span>
+      <h2 class="section-title">Nuestras Especialidades</h2>
+      <p class="section-subtitle">
+        Bebidas exclusivas infusionadas con extracto de hongo Lingzhi (Ganoderma Lucidum). Salud, antioxidantes y energía sin taquicardia.
+      </p>
+    </div>
+
+    <!-- Filtro de Categorías -->
+    <div class="category-filters">
+      @for (cat of categorias(); track cat) {
+        <button
+          class="cat-filter-btn"
+          [class.active]="categoriaActiva() === cat"
+          (click)="filtrarCategoria(cat)">
+          {{ cat }}
+        </button>
+      }
+    </div>
+
+    <!-- Grid de Especialidades -->
+    <div class="products-grid">
+      @for (item of especialidades(); track item.id) {
+        <div class="product-card">
+          <div class="product-img-wrap">
+            <img [src]="item.imagen" [alt]="item.nombre" loading="lazy">
+            @if (item.badge) {
+              <span class="product-badge">{{ item.badge }}</span>
+            }
+            <span class="product-category-tag">{{ item.categoria }}</span>
+          </div>
+
+          <div class="product-body">
+            <h3 class="product-title">{{ item.nombre }}</h3>
+            <p class="product-desc">{{ item.descripcion }}</p>
+
+            @if (item.beneficios) {
+              <div class="product-benefits">
+                <i class="bi bi-stars text-gold"></i>
+                <span><strong>Beneficio:</strong> {{ item.beneficios }}</span>
+              </div>
+            }
+
+            <div class="product-footer">
+              <div class="product-pricing">
+                <span class="price-label">Taza servida:</span>
+                <span class="price-value">{{ item.precio }} <small>Bs</small></span>
+                @if (item.precio_caja) {
+                  <span class="price-box">Caja: {{ item.precio_caja }} Bs</span>
+                }
+              </div>
+
+              <a
+                [href]="'https://wa.me/59171234567?text=' + encodeUri('Hola, deseo ordenar ' + item.nombre)"
+                target="_blank"
+                class="btn btn-sm btn-primary">
+                <i class="bi bi-cart-plus"></i> Pedir
+              </a>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN NOSOTROS -->
+<section id="nosotros" class="section-padding about-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Conócenos</span>
+      <h2 class="section-title">Sobre DXN CoffeeHouse Cochabamba</h2>
+      <p class="section-subtitle">
+        Una cafetería nacida con el propósito de conectar a las personas a través de la calidez, la salud y los extractos milenarios de la naturaleza.
+      </p>
+    </div>
+
+    <div class="about-cards-container">
+      @for (bloque of nosotros(); track bloque.id) {
+        <div class="about-card" [class.reverse]="bloque.orden % 2 === 0">
+          <div class="about-img-wrap">
+            <img [src]="bloque.imagen" [alt]="bloque.titulo" loading="lazy">
+          </div>
+          <div class="about-text-wrap">
+            <div class="about-badge">
+              <i class="bi" [class]="bloque.icono || 'bi-info-circle'"></i>
+              <span>{{ bloque.subtitulo || 'Compromiso DXN' }}</span>
+            </div>
+            <h3 class="about-card-title">{{ bloque.titulo }}</h3>
+            <p class="about-card-content">{{ bloque.contenido }}</p>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- GALERÍA DE LA TIENDA Y LOCAL -->
+    <div class="gallery-wrapper">
+      <div class="section-header" style="margin-top: 60px; margin-bottom: 35px;">
+        <span class="section-tag">Instalaciones</span>
+        <h3 class="section-title" style="font-size: 2rem;">Fotos de Nuestra Tienda y Ambiente</h3>
+      </div>
+
+      <div class="gallery-grid">
+        @for (foto of galeria(); track foto.id) {
+          <div class="gallery-item">
+            <img [src]="foto.imagen" [alt]="foto.titulo" loading="lazy">
+            <div class="gallery-overlay">
+              <span class="gallery-cat">{{ foto.categoria }}</span>
+              <h4 class="gallery-title">{{ foto.titulo }}</h4>
+              <p class="gallery-desc">{{ foto.descripcion }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN PRECIOS -->
+<section id="precios" class="section-padding pricing-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Planes & Combos</span>
+      <h2 class="section-title">Opciones de Degustación y Afiliación</h2>
+      <p class="section-subtitle">
+        Precios transparentes y accesibles. Desde una pausa rápida por la mañana hasta membresías vitalicias con descuento internacional.
+      </p>
+    </div>
+
+    <div class="pricing-grid">
+      @for (plan of precios(); track plan.id) {
+        <div class="pricing-card" [class.highlighted]="plan.destacado === 1">
+          @if (plan.destacado === 1) {
+            <div class="popular-ribbon">MÁS POPULAR</div>
+          }
+          <div class="pricing-head">
+            <span class="pricing-cat">{{ plan.categoria }}</span>
+            <h3 class="pricing-title">{{ plan.titulo }}</h3>
+            <p class="pricing-desc">{{ plan.descripcion }}</p>
+            <div class="pricing-amount">
+              <span class="currency">Bs</span>
+              <span class="value">{{ plan.precio }}</span>
+              <span class="period">/ {{ plan.periodo }}</span>
+            </div>
+          </div>
+
+          <ul class="pricing-features">
+            @for (feat of plan.caracteristicas; track feat) {
+              <li>
+                <i class="bi bi-check-circle-fill text-gold"></i>
+                <span>{{ feat }}</span>
+              </li>
+            }
+          </ul>
+
+          <div class="pricing-action">
+            <a
+              [href]="'https://wa.me/59171234567?text=' + encodeUri('Hola, me interesa el plan: ' + plan.titulo)"
+              target="_blank"
+              class="btn"
+              [class.btn-primary]="plan.destacado === 1"
+              [class.btn-outline]="plan.destacado !== 1">
+              {{ plan.boton_texto || 'Elegir Plan' }}
+            </a>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN CONTACTOS -->
+<section id="contacto" class="section-padding contact-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Visítanos o Escríbenos</span>
+      <h2 class="section-title">Contáctanos</h2>
+      <p class="section-subtitle">
+        ¿Tienes dudas, deseas reservar una mesa o afiliarte a DXN? Estamos a tu disposición.
+      </p>
+    </div>
+
+    <div class="contact-layout">
+      <!-- Info de contacto -->
+      <div class="contact-info-card">
+        <h3 class="info-card-title">Información de la Cafetería</h3>
+        <p class="info-card-desc">
+          Te invitamos a visitarnos en nuestro acogedor local en Cochabamba para vivir la experiencia del café saludable.
+        </p>
+
+        <div class="info-items">
+          <div class="info-item">
+            <div class="info-icon"><i class="bi bi-geo-alt-fill"></i></div>
+            <div class="info-content">
+              <strong>Dirección:</strong>
+              <span>{{ config()['direccion'] || 'Av. Heroínas #456 entre San Martín y 25 de Mayo, Cochabamba, Bolivia' }}</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon"><i class="bi bi-telephone-fill"></i></div>
+            <div class="info-content">
+              <strong>Teléfono:</strong>
+              <span>{{ config()['telefono'] || '+591 4 456-7890' }}</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon"><i class="bi bi-whatsapp"></i></div>
+            <div class="info-content">
+              <strong>WhatsApp Pedidos:</strong>
+              <span>{{ config()['whatsapp'] || '+591 71234567' }}</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon"><i class="bi bi-clock-fill"></i></div>
+            <div class="info-content">
+              <strong>Horarios de Atención:</strong>
+              <span>{{ config()['horario'] || 'Lunes a Sábado: 07:30 - 21:30 | Domingos: 09:00 - 20:00' }}</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon"><i class="bi bi-envelope-fill"></i></div>
+            <div class="info-content">
+              <strong>Correo Electrónico:</strong>
+              <span>{{ config()['email'] || 'contacto@dxncoffeehouse.bo' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="social-links-bar">
+          <a [href]="config()['facebook_url'] || 'https://facebook.com'" target="_blank" aria-label="Facebook">
+            <i class="bi bi-facebook"></i>
+          </a>
+          <a [href]="config()['instagram_url'] || 'https://instagram.com'" target="_blank" aria-label="Instagram">
+            <i class="bi bi-instagram"></i>
+          </a>
+          <a [href]="'https://wa.me/' + (config()['whatsapp'] || '59171234567')" target="_blank" aria-label="WhatsApp">
+            <i class="bi bi-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Formulario de contacto -->
+      <div class="contact-form-card">
+        <h3 class="form-card-title">Envíanos un Mensaje</h3>
+        <p class="form-card-subtitle">Todos los mensajes quedan guardados en nuestra base de datos para atención inmediata.</p>
+
+        @if (contactoMensajeExito()) {
+          <div class="alert alert-success">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>{{ contactoMensajeExito() }}</span>
+          </div>
+        }
+
+        @if (contactoMensajeError()) {
+          <div class="alert alert-error">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <span>{{ contactoMensajeError() }}</span>
+          </div>
+        }
+
+        <form (ngSubmit)="enviarContacto()" class="contact-form">
+          <div class="form-group">
+            <label for="cNombre">Nombre Completo *</label>
+            <input
+              type="text"
+              id="cNombre"
+              name="nombre"
+              [(ngModel)]="contactoForm.nombre"
+              placeholder="Ej. Juan Pérez"
+              required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cEmail">Correo Electrónico *</label>
+              <input
+                type="email"
+                id="cEmail"
+                name="email"
+                [(ngModel)]="contactoForm.email"
+                placeholder="juan@ejemplo.com"
+                required>
+            </div>
+
+            <div class="form-group">
+              <label for="cTelefono">Teléfono / Celular</label>
+              <input
+                type="text"
+                id="cTelefono"
+                name="telefono"
+                [(ngModel)]="contactoForm.telefono"
+                placeholder="+591 7XXXXXXX">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="cAsunto">Asunto</label>
+            <input
+              type="text"
+              id="cAsunto"
+              name="asunto"
+              [(ngModel)]="contactoForm.asunto"
+              placeholder="Consulta de productos, reserva, membresía...">
+          </div>
+
+          <div class="form-group">
+            <label for="cMensaje">Mensaje *</label>
+            <textarea
+              id="cMensaje"
+              name="mensaje"
+              rows="4"
+              [(ngModel)]="contactoForm.mensaje"
+              placeholder="Escribe aquí tu consulta o pedido..."
+              required></textarea>
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-primary btn-submit"
+            [disabled]="contactoEnviando()">
+            @if (contactoEnviando()) {
+              <i class="bi bi-hourglass-split"></i> Enviando mensaje...
+            } @else {
+              <i class="bi bi-send-fill"></i> Enviar Mensaje
+            }
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PIE DE PÁGINA -->
+<footer class="footer">
+  <div class="container footer-content">
+    <div class="footer-brand">
+      <div class="logo-icon-wrap">
+        <i class="bi bi-cup-hot-fill"></i>
+      </div>
+      <div>
+        <h4 class="footer-title">DXN <span class="text-gold">CoffeeHouse</span></h4>
+        <p class="footer-sub">Café Gourmet & Ganoderma · Cochabamba, Bolivia</p>
+      </div>
+    </div>
+
+    <p class="footer-copy">
+      &copy; 2026 DXN CoffeeHouse. Evaluación Continua H4 - Desarrollo de App Web Multimedia.
+    </p>
+
+    <div class="footer-back-top">
+      <button (click)="scrollTo('inicio')" class="btn-top" aria-label="Volver arriba">
+        <i class="bi bi-chevron-up"></i>
+      </button>
+    </div>
+  </div>
+</footer>
+
+<!-- BOTÓN FLOTANTE DE SOPORTE WHATSAPP -->
+<a [href]="'https://wa.me/' + (config()['whatsapp'] || '59171234567') + '?text=' + encodeUri('¡Hola DXN CoffeeHouse! Deseo más información.')"
+   target="_blank"
+   class="floating-whatsapp-btn"
+   title="Hablar por WhatsApp">
+  <i class="bi bi-whatsapp"></i>
+  <span class="whatsapp-label">Soporte</span>
+</a>
+
+<!-- WIDGET FLOTANTE DE CHATBOT (OLLAMA / GEMMA 3 / BARISTA DXN) -->
+<div class="chatbot-floating-wrapper">
+  <!-- Botón que abre el chat -->
+  <button
+    class="chatbot-toggle-btn"
+    (click)="toggleChat()"
+    [class.active]="chatAbierto()"
+    title="Hablar con Barista Virtual IA">
+    @if (chatAbierto()) {
+      <i class="bi bi-x-lg"></i>
+    } @else {
+      <div class="robot-icon-wrap">
+        <i class="bi bi-robot"></i>
+        <span class="online-indicator"></span>
+      </div>
+    }
+  </button>
+
+  <!-- Ventana de Chat -->
+  @if (chatAbierto()) {
+    <div class="chatbot-window">
+      <!-- Header del Chat -->
+      <div class="chat-header">
+        <div class="chat-header-user">
+          <div class="barista-avatar">
+            <i class="bi bi-cup-hot-fill"></i>
+          </div>
+          <div>
+            <h4 class="barista-name">Barista Virtual DXN</h4>
+            <span class="barista-status">
+              <span class="status-dot"></span> Ollama / Gemma 3 · En línea
+            </span>
+          </div>
+        </div>
+        <button class="chat-close-btn" (click)="toggleChat()">
+          <i class="bi bi-dash-lg"></i>
+        </button>
+      </div>
+
+      <!-- Cuerpo de Mensajes -->
+      <div class="chat-body" id="chatMessagesContainer">
+        @for (msg of mensajes(); track $index) {
+          <div class="chat-msg" [class.user]="msg.sender === 'user'" [class.bot]="msg.sender === 'bot'">
+            @if (msg.sender === 'bot') {
+              <div class="msg-avatar"><i class="bi bi-robot"></i></div>
+            }
+            <div class="msg-bubble">
+              <p>{{ msg.text }}</p>
+              @if (msg.source === 'ollama') {
+                <span class="source-tag"><i class="bi bi-cpu"></i> Modelo Gemma 3</span>
+              }
+              <span class="msg-time">{{ msg.timestamp | date:'shortTime' }}</span>
+            </div>
+          </div>
+        }
+
+        @if (chatCargando()) {
+          <div class="chat-msg bot">
+            <div class="msg-avatar"><i class="bi bi-robot"></i></div>
+            <div class="msg-bubble typing-bubble">
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Preguntas Sugeridas -->
+      <div class="chat-suggestions">
+        <span class="suggestions-label">Sugerencias rápidas:</span>
+        <div class="suggestions-list">
+          @for (preg of preguntasSugeridas; track preg) {
+            <button class="suggestion-chip" (click)="enviarPreguntaRapida(preg)">
+              {{ preg }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Formulario Input -->
+      <form class="chat-input-area" (ngSubmit)="enviarMensajeChat()">
+        <input
+          type="text"
+          name="chatPrompt"
+          [(ngModel)]="chatInput"
+          placeholder="Pregunta sobre café, beneficios, precios..."
+          [disabled]="chatCargando()"
+          autocomplete="off">
+        <button type="submit" class="chat-send-btn" [disabled]="!chatInput.trim() || chatCargando()">
+          <i class="bi bi-send-fill"></i>
+        </button>
+      </form>
+    </div>
+  }
+</div>
