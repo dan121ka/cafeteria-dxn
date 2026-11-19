@@ -204,14 +204,14 @@ export class App implements OnInit {
     if (!texto || this.chatCargando()) return;
 
     // Agregar mensaje del usuario
-    this.mensajes.update(list => [
-      ...list,
-      { sender: 'user', text: texto, timestamp: new Date() }
-    ]);
+    const nuevoMensajeUsuario: ChatMessage = { sender: 'user', text: texto, timestamp: new Date() };
+    const historialPrevio = [...this.mensajes()];
+
+    this.mensajes.update(list => [...list, nuevoMensajeUsuario]);
     this.chatInput = '';
     this.chatCargando.set(true);
 
-    this.chatbot.sendMessage(texto).subscribe({
+    this.chatbot.sendMessage(texto, historialPrevio).subscribe({
       next: (res) => {
         this.chatCargando.set(false);
         this.mensajes.update(list => [
