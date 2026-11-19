@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, AfterViewInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -19,9 +19,19 @@ import { ChatbotService, ChatMessage } from './services/chatbot.service';
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App implements OnInit {
+export class App implements OnInit, AfterViewInit {
   private api = inject(ApiService);
   private chatbot = inject(ChatbotService);
+
+  // URL del video Hero computada
+  videoUrl = computed(() => {
+    const val = this.config()['hero_video_url'];
+    if (!val) return '/videos/hero-cafeteria.mp4';
+    if (val.startsWith('http://') || val.startsWith('https://') || val.startsWith('/')) {
+      return val;
+    }
+    return `/${val}`;
+  });
 
   // Datos principales desde la Base de Datos
   config = signal<Record<string, string>>({});
@@ -80,13 +90,46 @@ export class App implements OnInit {
     this.cargarDatos();
   }
 
+  ngAfterViewInit(): void {
+    this.iniciarVideoHero();
+    // Soporte para navegadores con bloqueo estricto (Brave Shields / Chrome autoplay policy)
+    const desbloquear = () => {
+      this.iniciarVideoHero();
+      window.removeEventListener('click', desbloquear);
+      window.removeEventListener('touchstart', desbloquear);
+      window.removeEventListener('scroll', desbloquear);
+    };
+    window.addEventListener('click', desbloquear, { passive: true });
+    window.addEventListener('touchstart', desbloquear, { passive: true });
+    window.addEventListener('scroll', desbloquear, { passive: true });
+  }
+
+  iniciarVideoHero(): void {
+    setTimeout(() => {
+      const video = document.getElementById('heroVideoPlayer') as HTMLVideoElement;
+      if (video) {
+        video.muted = true;
+        video.defaultMuted = true;
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((err) => {
+            console.warn('Autoplay pausado por el navegador (iniciará con interacción):', err.message);
+          });
+        }
+      }
+    }, 50);
+  }
+
   cargarDatos(): void {
     this.loading.set(true);
     this.error.set(null);
 
     // 1. Cargar Configuración General
     this.api.getConfiguracion().subscribe({
-      next: (res) => this.config.set(res.map),
+      next: (res) => {
+        this.config.set(res.map);
+        this.iniciarVideoHero();
+      },
       error: (err) => console.error('Error cargando configuración:', err)
     });
 
