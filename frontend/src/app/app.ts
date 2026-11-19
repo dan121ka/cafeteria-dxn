@@ -23,14 +23,16 @@ export class App implements OnInit, AfterViewInit {
   private api = inject(ApiService);
   private chatbot = inject(ChatbotService);
 
-  // URL del video Hero computada
+  // URL del video Hero computada (compatible con localhost y GitHub Pages)
   videoUrl = computed(() => {
     const val = this.config()['hero_video_url'];
-    if (!val) return '/videos/hero-cafeteria.mp4';
-    if (val.startsWith('http://') || val.startsWith('https://') || val.startsWith('/')) {
+    if (!val || val.includes('hero-cafeteria.mp4')) {
+      return 'videos/hero-cafeteria.mp4';
+    }
+    if (val.startsWith('http://') || val.startsWith('https://')) {
       return val;
     }
-    return `/${val}`;
+    return val.startsWith('/') ? val.slice(1) : val;
   });
 
   // Datos principales desde la Base de Datos
