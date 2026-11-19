@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const cors = require('./middlewares/cors');
 const errorHandler = require('./middlewares/error-handler');
@@ -16,6 +17,11 @@ const app = express();
 
 app.disable('x-powered-by');
 app.use(cors);
+
+// Archivos estáticos públicos (videos y recursos multimedia locales)
+app.use(express.static(path.join(__dirname, '../public')));
+app.use('/videos', express.static(path.join(__dirname, '../public/videos')));
+
 app.use(express.json({ limit: '1mb' }));
 app.use(requireJsonObject);
 

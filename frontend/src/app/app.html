@@ -44,9 +44,10 @@
       loop
       muted
       playsinline
-      [poster]="config()['hero_poster'] || 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1920'">
-      <source [src]="config()['hero_video_url'] || 'https://videos.pexels.com/video-files/2909914/2909914-hd_1920_1080_24fps.mp4'" type="video/mp4">
-      <source [src]="config()['hero_video_backup_url'] || 'https://videos.pexels.com/video-files/855564/855564-hd_1920_1080_25fps.mp4'" type="video/mp4">
+      [poster]="config()['hero_poster'] || 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=1920'"
+      [src]="config()['hero_video_url'] || 'videos/hero-cafeteria.mp4'">
+      <source [src]="config()['hero_video_url'] || 'videos/hero-cafeteria.mp4'" type="video/mp4">
+      <source [src]="config()['hero_video_backup_url'] || 'https://videos.pexels.com/video-files/2909914/2909914-hd_1920_1080_24fps.mp4'" type="video/mp4">
       Tu navegador no soporta videos HTML5.
     </video>
     <div class="hero-overlay"></div>
